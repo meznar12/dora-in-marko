@@ -58,9 +58,9 @@ button:focus-visible{outline:2px solid var(--rose); outline-offset:4px}
 .card::after{content:""; position:absolute; inset:9px; border:1px solid rgba(180,96,75,.28); border-radius:2px; pointer-events:none}
 @keyframes rise{from{opacity:0; transform:translateY(46px)}to{opacity:1; transform:none}}
 .hero svg{display:block; width:100%; height:auto}
-.track{fill:none; stroke:var(--ink); stroke-width:1.5; stroke-linecap:round; stroke-dasharray:420; stroke-dashoffset:420; animation:carve 2.6s ease-in-out .9s forwards}
+.track{fill:none; stroke:var(--ink); stroke-width:1.5; stroke-linecap:round; stroke-dasharray:1; stroke-dashoffset:1; animation:draw 2.6s ease-in-out .9s both}
 .track.b{animation-delay:1.2s}
-.track.one{stroke-width:2.2; stroke-dasharray:40; stroke-dashoffset:40; animation:carve .7s ease-out 3.6s forwards}
+.track.one{stroke-width:2.2; animation:draw .7s ease-out 3.8s both}
 @keyframes carve{to{stroke-dashoffset:0}}
 .body{position:relative; padding:0 30px 38px}
 .names{font-style:italic; font-weight:400; font-size:clamp(46px,14vw,58px); line-height:.92; margin:-6px 0 0; text-align:center; color:var(--ink)}
@@ -92,10 +92,54 @@ button:focus-visible{outline:2px solid var(--rose); outline-offset:4px}
 .ps{position:relative; margin:34px 0 0; padding-top:22px; border-top:1px dashed var(--line); font-size:17px; line-height:1.55}
 .ps b{font-weight:400; font-style:italic; color:var(--accent)}
 .stamp{float:right; width:96px; height:96px; margin:-6px -8px 4px 10px; transform:rotate(-11deg); color:var(--accent); opacity:.82; mix-blend-mode:multiply}
+
+/* ---------- animacije ---------- */
+@keyframes draw{0%{stroke-dashoffset:1; opacity:0}3%{opacity:1}100%{stroke-dashoffset:0; opacity:1}}
+@keyframes fadeUp{from{opacity:0; transform:translateY(16px)}to{opacity:1; transform:none}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes lift{from{opacity:0; transform:translateY(var(--from,14px))}to{opacity:1; transform:none}}
+@keyframes coverOut{to{opacity:0; transform:translateY(-18px) scale(.98)}}
+@keyframes twinkle{0%{opacity:.15}100%{opacity:.85}}
+@keyframes dot{0%{transform:scale(1); background:var(--paper); border-color:var(--line)}55%{transform:scale(1.45); background:var(--accent); border-color:var(--accent)}100%{transform:scale(1); background:var(--accent); border-color:var(--accent)}}
+@keyframes stamp{0%{opacity:0; transform:rotate(-2deg) scale(1.8)}62%{opacity:.95; transform:rotate(-12deg) scale(.93)}100%{opacity:.82; transform:rotate(-11deg) scale(1)}}
+
+body::after{content:""; position:fixed; inset:0; pointer-events:none;
+  background-image:
+    radial-gradient(1.6px 1.6px at 22% 12%, var(--star) 50%, transparent 51%),
+    radial-gradient(1.4px 1.4px at 67% 22%, var(--star) 50%, transparent 51%),
+    radial-gradient(1.8px 1.8px at 88% 44%, var(--star) 50%, transparent 51%),
+    radial-gradient(1.4px 1.4px at 9% 52%, var(--star) 50%, transparent 51%),
+    radial-gradient(1.6px 1.6px at 40% 90%, var(--star) 50%, transparent 51%),
+    radial-gradient(1.4px 1.4px at 84% 92%, var(--star) 50%, transparent 51%);
+  animation:twinkle 4.5s ease-in-out infinite alternate}
+
+.cover svg .outline{stroke-dasharray:1; stroke-dashoffset:1; animation:draw 1.8s ease-out .15s both}
+.cover svg path:not(.outline){animation:fade .9s ease 1.3s both}
+.cover h1{animation:fadeUp 1s cubic-bezier(.2,.8,.2,1) .45s both}
+.cover p{animation:fadeUp 1s cubic-bezier(.2,.8,.2,1) .7s both}
+.open{animation:fadeUp 1s cubic-bezier(.2,.8,.2,1) .95s both}
+.open:active{transform:scale(.97)}
+.cover.leaving{animation:coverOut .45s cubic-bezier(.4,0,.6,1) forwards}
+
+.hero .sun{animation:lift 2.4s cubic-bezier(.2,.8,.2,1) .35s both; --from:26px}
+.hero .ridge-back{animation:lift 1.6s cubic-bezier(.2,.8,.2,1) .2s both; --from:10px}
+.hero .ridge-mid{animation:lift 1.6s cubic-bezier(.2,.8,.2,1) .3s both; --from:20px}
+.names{animation:fadeUp 1.1s cubic-bezier(.2,.8,.2,1) .5s both}
+.date{animation:fade .9s ease .85s both}
+.date::before{transform-origin:right center; animation:grow .9s cubic-bezier(.2,.8,.2,1) 1s both}
+.date::after{transform-origin:left center; animation:grow .9s cubic-bezier(.2,.8,.2,1) 1s both}
+
+.js .io{opacity:0; transform:translateY(16px); transition:opacity .9s ease, transform .9s cubic-bezier(.2,.8,.2,1)}
+.js .io.in{opacity:1; transform:none}
+.js .time:not(.in) .stops li.on::before{background:var(--paper); border-color:var(--line)}
+.js .time.in .stops li.on::before{animation:dot .55s cubic-bezier(.3,1.5,.5,1) var(--d,0ms) both}
+.js .ps .stamp{opacity:0}
+.js .ps.in .stamp{animation:stamp .6s cubic-bezier(.2,.9,.3,1.15) .45s both}
 [hidden]{display:none!important}
 @media (prefers-reduced-motion: reduce){
   *,*::before,*::after{animation-duration:.01s!important; animation-delay:0s!important; transition:none!important}
-  .track{stroke-dashoffset:0}
+  .track{stroke-dashoffset:0; opacity:1}
 }
 </style>
 </head>
@@ -103,7 +147,7 @@ button:focus-visible{outline:2px solid var(--rose); outline-offset:4px}
 <div class="wrap">
   <section class="cover" id="cover">
     <svg viewBox="0 0 120 60" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <path d="M4 56 34 22 48 36 66 8 88 34 98 26 116 56"/>
+      <path class="outline" pathLength="1" d="M4 56 34 22 48 36 66 8 88 34 98 26 116 56"/>
       <path d="M64 14c-6 5 3 9-3 14s4 9-2 14 2 7 1 12M69 14c-6 5 3 9-3 14s4 9-2 14-1 8-3 12" opacity=".75"/>
     </svg>
     <h1>Za Doro<br>in Marka</h1>
@@ -119,14 +163,17 @@ button:focus-visible{outline:2px solid var(--rose); outline-offset:4px}
           <linearGradient id="mid" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A9BBCE"/><stop offset="1" stop-color="#C9D5E1"/></linearGradient>
         </defs>
         <rect width="360" height="230" fill="url(#sky)"/>
-        <circle cx="270" cy="74" r="24" fill="#F6C9AE" opacity=".85"/>
-        <path d="M0 150 40 118 78 132 120 92 160 116 214 76 252 106 292 88 360 122V230H0Z" fill="#E6CDCB"/>
-        <path d="M0 176 58 126 92 146 150 74 178 92 204 54 262 122 300 104 360 152V230H0Z" fill="url(#mid)"/>
-        <path d="M150 74 178 92 204 54 224 78 210 74 198 86 186 94 172 86 162 90Z M58 126 92 146 76 136 66 140Z M300 104 326 122 312 118Z" fill="#FBF8F4"/>
+        <circle class="sun" cx="270" cy="74" r="24" fill="#F6C9AE" opacity=".85"/>
+        <path class="ridge-back" d="M0 150 40 118 78 132 120 92 160 116 214 76 252 106 292 88 360 122V230H0Z" fill="#E6CDCB"/>
+        <path class="ridge-mid" d="M0 176 58 126 92 146 150 74 178 92 204 54 262 122 300 104 360 152V230H0Z" fill="url(#mid)"/>
+        <path class="ridge-mid" d="M150 74 178 92 204 54 224 78 210 74 198 86 186 94 172 86 162 90Z M58 126 92 146 76 136 66 140Z M300 104 326 122 312 118Z" fill="#FBF8F4"/>
         <path d="M0 230V200C80 182 140 192 180 198 230 192 290 182 360 200V230Z" fill="#FBF8F4"/>
-        <path class="track a" d="M196.0 72.0C193.8 75.3 180.8 84.7 183.0 92.0C185.2 99.3 211.0 107.3 209.5 116.0C208.0 124.7 174.3 134.7 174.0 144.0C173.7 153.3 205.7 163.3 207.5 172.0C209.3 180.7 189.6 189.7 185.0 196.0C180.4 202.3 180.8 207.7 180.0 210.0"/>
-        <path class="track b" d="M206.0 72.0C203.8 75.3 190.9 84.7 193.0 92.0C195.1 99.3 220.3 107.3 218.5 116.0C216.7 124.7 183.0 134.7 182.0 144.0C181.0 153.3 211.7 163.3 212.5 172.0C213.3 180.7 192.4 189.7 187.0 196.0C181.6 202.3 181.2 207.7 180.0 210.0"/>
-        <path class="track one" d="M180 210V230"/>
+        <path class="track a" id="ta" pathLength="1" d="M196.0 72.0C193.8 75.3 180.8 84.7 183.0 92.0C185.2 99.3 211.0 107.3 209.5 116.0C208.0 124.7 174.3 134.7 174.0 144.0C173.7 153.3 205.7 163.3 207.5 172.0C209.3 180.7 189.6 189.7 185.0 196.0C180.4 202.3 180.8 207.7 180.0 210.0"/>
+        <path class="track b" id="tb" pathLength="1" d="M206.0 72.0C203.8 75.3 190.9 84.7 193.0 92.0C195.1 99.3 220.3 107.3 218.5 116.0C216.7 124.7 183.0 134.7 182.0 144.0C181.0 153.3 211.7 163.3 212.5 172.0C213.3 180.7 192.4 189.7 187.0 196.0C181.6 202.3 181.2 207.7 180.0 210.0"/>
+        <path class="track one" pathLength="1" d="M180 210V230"/>
+        <circle r="2.6" opacity="0" style="fill:var(--ink)" data-delay="0.9"><animateMotion begin="indefinite" dur="2.6s" fill="freeze" calcMode="spline" keyPoints="0;1" keyTimes="0;1" keySplines=".42 0 .58 1"><mpath href="#ta"/></animateMotion><animate attributeName="opacity" begin="indefinite" dur="2.6s" fill="freeze" values="0;1;1;0" keyTimes="0;.06;.9;1"/></circle>
+        <circle r="2.6" opacity="0" style="fill:var(--ink)" data-delay="1.2"><animateMotion begin="indefinite" dur="2.6s" fill="freeze" calcMode="spline" keyPoints="0;1" keyTimes="0;1" keySplines=".42 0 .58 1"><mpath href="#tb"/></animateMotion><animate attributeName="opacity" begin="indefinite" dur="2.6s" fill="freeze" values="0;1;1;0" keyTimes="0;.06;.9;1"/></circle>
+        <circle cx="180" cy="210" r="0" fill="none" opacity="0" style="stroke:var(--accent)" stroke-width="1.3" data-delay="3.75"><animate attributeName="r" begin="indefinite" dur="1.1s" fill="freeze" values="0;16" keySplines=".2 .8 .2 1" calcMode="spline" keyTimes="0;1"/><animate attributeName="opacity" begin="indefinite" dur="1.1s" fill="freeze" values=".9;0"/></circle>
       </svg>
     </div>
     <div class="body">
@@ -175,11 +222,6 @@ button:focus-visible{outline:2px solid var(--rose); outline-offset:4px}
 </div>
 <script>
 (function(){
-  document.getElementById('open').onclick=function(){
-    document.getElementById('cover').hidden=true;
-    document.getElementById('card').hidden=false;
-    window.scrollTo(0,0);
-  };
   function plural(n,f){ var r=n%100; return r===1?f[0]:r===2?f[1]:(r===3||r===4)?f[2]:f[3]; }
   var DNI=['dan','dneva','dnevi','dni'], LET=['leto','leti','leta','let'];
   /* ?datum=2031-10-03 omogoča predogled na poljuben dan */
@@ -215,9 +257,61 @@ button:focus-visible{outline:2px solid var(--rose); outline-offset:4px}
     nx.textContent='Zlata obletnica je za vama. Čestitke, prava legenda sta.';
   }
   window.__progress=prog;
-  document.getElementById('open').addEventListener('click',function(){
-    setTimeout(function(){ document.getElementById('fill').style.width=(Math.max(prog,0)*100)+'%'; },60);
-  });
+
+  /* ---------- animacije ---------- */
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.documentElement.classList.add('js');
+  var cover=document.getElementById('cover'), card=document.getElementById('card'), opened=false;
+
+  function startHero(){
+    if(reduce) return;
+    card.querySelectorAll('[data-delay]').forEach(function(el){
+      var d=parseFloat(el.getAttribute('data-delay'))||0;
+      el.querySelectorAll('animate, animateMotion').forEach(function(a){ try{ a.beginElementAt(d); }catch(e){} });
+    });
+  }
+  /* cas iz cubic-bezier(.3,.7,.2,1): pri katerem delezu casa je dosezen delez poti r */
+  function timeFor(r){
+    var lo=0, hi=1, u=.5;
+    function by(t){ return 3*(1-t)*(1-t)*t*.7 + 3*(1-t)*t*t*1 + t*t*t; }
+    function bx(t){ return 3*(1-t)*(1-t)*t*.3 + 3*(1-t)*t*t*.2 + t*t*t; }
+    for(var i=0;i<30;i++){ u=(lo+hi)/2; if(by(u)<r) lo=u; else hi=u; }
+    return bx(u);
+  }
+  function countUp(el){
+    var target=parseInt(el.textContent,10); if(!(target>1) || reduce) return;
+    var t0=null, dur=Math.min(1800, 700+target*.6);
+    function step(ts){ if(!t0) t0=ts; var k=Math.min(1,(ts-t0)/dur), e=1-Math.pow(1-k,3);
+      el.textContent=Math.round(target*e); if(k<1) requestAnimationFrame(step); }
+    el.textContent='0'; requestAnimationFrame(step);
+  }
+  function onTime(sec){
+    var prog=window.__progress||0, lis=sec.querySelectorAll('.stops li');
+    lis.forEach(function(li,k){
+      if(!li.classList.contains('on')) return;
+      var r=(k/(lis.length-1))/(prog||1), ms = k===0 ? 250 : 800 + 1800*timeFor(Math.min(1,r));
+      li.style.setProperty('--d', Math.round(ms)+'ms');
+    });
+    setTimeout(function(){ document.getElementById('fill').style.width=(Math.max(prog,0)*100)+'%'; }, 300);
+    var b=sec.querySelector('#count b'); if(b) countUp(b);
+  }
+  function observe(){
+    var els=[].slice.call(card.querySelectorAll('.letter p, .time, .sign, .ps'));
+    card.querySelectorAll('.letter p').forEach(function(p,i){ p.style.transitionDelay=(i*110)+'ms'; });
+    els.forEach(function(el){ el.classList.add('io'); });
+    var show=function(el){ if(el.classList.contains('in')) return; el.classList.add('in'); if(el.classList.contains('time')) onTime(el); };
+    if(!('IntersectionObserver' in window)){ els.forEach(show); return; }
+    var io=new IntersectionObserver(function(entries){
+      entries.forEach(function(en){ if(en.isIntersecting){ show(en.target); io.unobserve(en.target); } });
+    },{threshold:.25});
+    setTimeout(function(){ els.forEach(function(el){ io.observe(el); }); }, reduce?0:1250);
+  }
+  document.getElementById('open').onclick=function(){
+    if(opened) return; opened=true;
+    var go=function(){ cover.hidden=true; card.hidden=false; window.scrollTo(0,0); startHero(); observe(); };
+    if(reduce){ go(); return; }
+    cover.classList.add('leaving'); setTimeout(go, 430);
+  };
 })();
 </script>
 </body>
